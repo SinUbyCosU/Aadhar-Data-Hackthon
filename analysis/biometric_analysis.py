@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, IsolationForest
 import plotly.express as px
 import plotly.io as pio
 
@@ -180,6 +180,43 @@ def time_series_trends(df: pd.DataFrame, datetime_cols: List[str], out_dir: str)
     save_plot(out_dir, f"time_series_{dtc}")
 
 
+def day_hour_heatmaps(df: pd.DataFrame, datetime_cols: List[str], out_dir: str):
+    if not datetime_cols:
+        return
+    dtc = datetime_cols[0]
+    temp = df[[dtc]].dropna().copy()
+    if temp.empty:
+        return
+    temp["dow"] = temp[dtc].dt.dayofweek
+    temp["hour"] = temp[dtc].dt.hour
+    # Day of week vs hour heatmap
+    pivot = temp.pivot_table(index="dow", columns="hour", values=dtc, aggfunc="count").fillna(0)
+    plt.figure(figsize=(12, 5))
+    sns.heatmap(pivot, cmap="YlGnBu")
+    plt.title("Activity heatmap: Day-of-week x Hour")
+    save_plot(out_dir, "heatmap_dow_hour")
+
+
+def calendar_heatmap(df: pd.DataFrame, datetime_cols: List[str], out_dir: str):
+    if not datetime_cols:
+        return
+    dtc = datetime_cols[0]
+    temp = df[[dtc]].dropna().copy()
+    if temp.empty:
+        return
+    temp["date"] = temp[dtc].dt.date
+    daily = temp.groupby("date").size().rename("count").reset_index()
+    daily["date"] = pd.to_datetime(daily["date"])  # ensure datetime
+    daily["year"] = daily["date"].dt.year
+    daily["week"] = daily["date"].dt.isocalendar().week.astype(int)
+    daily["dow"] = daily["date"].dt.dayofweek
+    pivot = daily.pivot_table(index="dow", columns=["year", "week"], values="count", aggfunc="sum").fillna(0)
+    plt.figure(figsize=(14, 4))
+    sns.heatmap(pivot, cmap="magma")
+    plt.title("Calendar heatmap (weekly x DOW)")
+    save_plot(out_dir, "calendar_heatmap_weekly")
+
+
 def geo_analysis(df: pd.DataFrame, geo_candidates: List[str], out_dir: str):
     for col in geo_candidates[:3]:
         vc = df[col].value_counts(dropna=False).head(30)
@@ -187,6 +224,19 @@ def geo_analysis(df: pd.DataFrame, geo_candidates: List[str], out_dir: str):
         sns.barplot(x=vc.values, y=vc.index, orient="h")
         plt.title(f"Top geographic units: {col}")
         save_plot(out_dir, f"geo_top_{col}")
+
+    # Treemap state->district if both exist
+    state_col = None
+    dist_col = None
+    for gc in geo_candidates:
+        if gc.lower() == "state":
+            state_col = gc
+        if gc.lower() == "district":
+            dist_col = gc
+    if state_col and dist_col and state_col in df.columns and dist_col in df.columns:
+        sample = df[[state_col, dist_col]].dropna().sample(min(len(df), 200_000), random_state=RANDOM_STATE)
+        fig = px.treemap(sample, path=[state_col, dist_col], title="Treemap: State → District volume")
+        save_html(fig, out_dir, "treemap_state_district")
 
 
 def outcome_analysis(df: pd.DataFrame, label_candidates: List[str], out_dir: str):
@@ -253,7 +303,13 @@ def pca_and_clustering(df: pd.DataFrame, numeric_cols: List[str], out_dir: str, 
     for k in range(2, 7):
         km = KMeans(n_clusters=k, random_state=RANDOM_STATE, n_init=10)
         labels = km.fit_predict(X)
-        score = silhouette_score(X, labels)
+        # Compute silhouette on a smaller subsample to avoid O(n^2) memory
+        if len(X) > 3000:
+            rng = np.random.default_rng(RANDOM_STATE)
+            idx = rng.choice(len(X), size=3000, replace=False)
+            score = silhouette_score(X[idx], labels[idx])
+        else:
+            score = silhouette_score(X, labels)
         if score > best_score:
             best_k, best_score = k, score
 
@@ -322,6 +378,99 @@ def top3_corr_3d_scatter(df: pd.DataFrame, numeric_cols: List[str], out_dir: str
     save_html(fig, out_dir, "top3_corr_3d_scatter")
 
 
+def sankey_geo_outcome(df: pd.DataFrame, out_dir: str, geo_candidates: List[str], label_candidates: List[str]):
+    # Build Sankey: State -> District -> Outcome (if available)
+    try:
+        import plotly.graph_objects as go
+    except Exception:
+        return
+    state = next((c for c in geo_candidates if c.lower() == "state" and c in df.columns), None)
+    district = next((c for c in geo_candidates if c.lower() == "district" and c in df.columns), None)
+    label_col = label_candidates[0] if label_candidates else None
+    if not (state and district) and not label_col:
+        return
+    cols = [c for c in [state, district, label_col] if c]
+    data = df[cols].dropna().sample(min(len(df), 150_000), random_state=RANDOM_STATE)
+    # Build nodes and links
+    levels = []
+    if state:
+        levels.append(data[state].astype(str))
+    if district:
+        levels.append(data[district].astype(str))
+    if label_col:
+        levels.append(data[label_col].astype(str))
+    # Build global label list
+    labels = []
+    label_index = {}
+    level_offsets = []
+    for level in levels:
+        unique_vals = level.value_counts().head(50).index.tolist()  # limit nodes for readability
+        offset = len(labels)
+        level_offsets.append((offset, unique_vals))
+        for v in unique_vals:
+            label_index[v] = len(labels)
+            labels.append(v)
+    # Links between consecutive levels
+    sources, targets, values = [], [], []
+    for i in range(len(levels) - 1):
+        left_vals = level_offsets[i][1]
+        right_vals = level_offsets[i + 1][1]
+        sdf = data[data[levels[i].name].isin(left_vals) & data[levels[i + 1].name].isin(right_vals)]
+        grp = sdf.groupby([levels[i].name, levels[i + 1].name]).size().reset_index(name="count")
+        for _, row in grp.iterrows():
+            sources.append(label_index[row[levels[i].name]])
+            targets.append(label_index[row[levels[i + 1].name]])
+            values.append(int(row["count"]))
+    if not values:
+        return
+    fig = go.Figure(go.Sankey(
+        node=dict(pad=10, thickness=12, line=dict(color="black", width=0.4), label=labels),
+        link=dict(source=sources, target=targets, value=values)
+    ))
+    fig.update_layout(title_text="Flow: State → District → Outcome", font_size=10)
+    save_html(fig, out_dir, "sankey_state_district_outcome")
+
+
+def scatter_matrix_top_numeric(df: pd.DataFrame, numeric_cols: List[str], out_dir: str):
+    cols = numeric_cols[:5]
+    if len(cols) < 2:
+        return
+    sample = df[cols].dropna().sample(min(len(df), 5_000), random_state=RANDOM_STATE)
+    fig = px.scatter_matrix(sample, dimensions=cols, title="Scatter matrix (top numeric)")
+    save_html(fig, out_dir, "scatter_matrix_top_numeric")
+
+
+def anomalous_days(df: pd.DataFrame, datetime_cols: List[str], out_dir: str):
+    if not datetime_cols:
+        return
+    dtc = datetime_cols[0]
+    temp = df[[dtc]].dropna().copy()
+    if temp.empty:
+        return
+    temp["date"] = temp[dtc].dt.date
+    daily = temp.groupby("date").size().rename("count").reset_index()
+    clf = IsolationForest(random_state=RANDOM_STATE, contamination=0.02)
+    daily["score"] = clf.fit_predict(daily[["count"]])
+    outliers = daily[daily["score"] == -1]
+    if outliers.empty:
+        return
+    plt.figure()
+    plt.plot(daily["date"], daily["count"], label="Daily count")
+    plt.scatter(outliers["date"], outliers["count"], color="red", label="Anomaly")
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.title("Anomalous days (IsolationForest)")
+    save_plot(out_dir, "anomalous_days")
+
+
+def _infer_subdir_from_path(input_dir: str) -> str:
+    name = os.path.basename(os.path.normpath(input_dir)).lower()
+    for key in ["biometric", "enrolment", "demographic"]:
+        if key in name:
+            return key
+    return "biometric"
+
+
 def analyze_folder(input_dir: str, workspace_root: str):
     csvs = find_csv_files(input_dir)
     if not csvs:
@@ -336,7 +485,8 @@ def analyze_folder(input_dir: str, workspace_root: str):
     df_all = pd.concat(frames, ignore_index=True)
     df_all = coerce_types(df_all)
 
-    out_dir = ensure_output_dir(workspace_root, subdir="biometric")
+    subdir = _infer_subdir_from_path(input_dir)
+    out_dir = ensure_output_dir(workspace_root, subdir=subdir)
 
     # Persist basic schema report
     report = {
@@ -357,6 +507,8 @@ def analyze_folder(input_dir: str, workspace_root: str):
     categorical_distributions(df_all, categorical_cols, out_dir)
     numeric_distributions(df_all, numeric_cols, out_dir)
     time_series_trends(df_all, datetime_cols, out_dir)
+    day_hour_heatmaps(df_all, datetime_cols, out_dir)
+    calendar_heatmap(df_all, datetime_cols, out_dir)
     geo_analysis(df_all, geo_candidates, out_dir)
     outcome_analysis(df_all, label_candidates, out_dir)
 
@@ -366,6 +518,9 @@ def analyze_folder(input_dir: str, workspace_root: str):
     # 3D plots
     pca_3d_plot(df_all, numeric_cols, out_dir, label_candidates)
     top3_corr_3d_scatter(df_all, numeric_cols, out_dir)
+    scatter_matrix_top_numeric(df_all, numeric_cols, out_dir)
+    sankey_geo_outcome(df_all, out_dir, geo_candidates, label_candidates)
+    anomalous_days(df_all, datetime_cols, out_dir)
 
     return out_dir
 
