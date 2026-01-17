@@ -1,6 +1,6 @@
-# Aadhaar Biometric CSV Analysis
+# Aadhaar CSV Analysis (Per‑Dataset)
 
-This toolkit loads all CSVs in a folder and produces advanced, non-basic plots and insights.
+This toolkit loads all CSVs in a selected dataset folder and produces advanced, non‑basic plots and insights.
 
 ## Quick Start
 
@@ -11,7 +11,7 @@ This toolkit loads all CSVs in a folder and produces advanced, non-basic plots a
 pip install -r analysis/requirements.txt
 ```
 
-3. Run the analysis against the biometric folder:
+3. Run the analysis for the biometric dataset:
 
 ```
 python analysis/biometric_analysis.py "api_data_aadhar_biometric"
@@ -29,6 +29,10 @@ Outputs will be saved under `analysis_outputs/biometric`.
 - Outcome analysis and success rates (if outcome-like column exists)
 - PCA + KMeans clustering to surface latent structure
 - RandomForest feature importance (if binary outcome is detected)
+
+## Other Tools
+- Comparative dashboards across datasets: `analysis/multi_dataset_analysis.py`
+- National insights summary (produces `INSIGHTS.md` + JSON): `analysis/generate_insights.py`
 
 ## Notes
 - Handles multi-file folders and mixed CSV formats automatically.
