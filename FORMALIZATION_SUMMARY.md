@@ -106,7 +106,7 @@ While formalizing, we maintained:
 **GitHub URL:** https://github.com/SinUbyCosU/Aadhar-Data-Hackthon  
 **Branch:** main  
 **Latest Commit:** fffbe  
-**Status:** ✅ All changes successfully pushed
+**Status:** All changes successfully pushed
 
 ### Next Steps for Submission
 
