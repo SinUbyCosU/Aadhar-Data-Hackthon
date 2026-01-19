@@ -17,7 +17,13 @@ __pycache__/
 Thumbs.db
 
 # Data and outputs
-analysis_outputs/
+analysis_outputs/dashboard/
+analysis_outputs/enrolment/
+analysis_outputs/demographic/
+analysis_outputs/biometric/
+analysis_outputs/insights/
+# Keep strategic_analysis outputs for hackathon submission
+!analysis_outputs/strategic_analysis/
 api_data_aadhar_*/**/*.csv
 *.zip
 
