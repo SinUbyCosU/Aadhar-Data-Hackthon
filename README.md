@@ -1,38 +1,33 @@
-# UIDAI Aadhaar Data Analysis Framework
+# Aadhaar Data Analysis - Hackathon 2026
 
-## Overview
+## What This Is
 
-This repository contains a comprehensive analytical framework for UIDAI Aadhaar Hackathon 2026, featuring advanced statistical analysis, predictive risk modeling, and policy intervention frameworks for Aadhaar enrolment, demographic, and biometric update datasets.
+This project analyzes Aadhaar enrollment and update data to find patterns and solve real problems. We discovered that seasonal migration causes people to miss biometric updates, which can lead to losing access to government benefits.
 
-## Key Deliverables
+**Start here:** Read [SIMPLE_EXPLANATION.md](SIMPLE_EXPLANATION.md) for a plain-language overview of what we found and why it matters.
 
-### Strategic Documents
-- **[STRATEGIC_POLICY_FRAMEWORK.md](STRATEGIC_POLICY_FRAMEWORK.md)** - Comprehensive policy framework with predictive analytics and intervention strategies
-- **[EXECUTIVE_BRIEF.md](EXECUTIVE_BRIEF.md)** - Concise executive summary for stakeholders
-- **[INSIGHTS.md](INSIGHTS.md)** - National-level insights across all datasets
+## Key Documents
 
-### Technical Reports
-- **[COMPREHENSIVE_TECHNICAL_REPORT.md](analysis_outputs/strategic_analysis/COMPREHENSIVE_TECHNICAL_REPORT.md)** - Detailed technical methodology and findings
-- **[strategic_insights.json](analysis_outputs/strategic_analysis/strategic_insights.json)** - Structured data outputs
+### Easy to Read
+- **[SIMPLE_EXPLANATION.md](SIMPLE_EXPLANATION.md)** - The problem, solution, and impact explained simply (start here!)
+- **[INSIGHTS.md](INSIGHTS.md)** - Key statistics and findings by state and district
 
-## Repository Structure
+### Detailed Analysis
+- **[EXECUTIVE_BRIEF.md](EXECUTIVE_BRIEF.md)** - Summary for decision-makers
+- **[STRATEGIC_POLICY_FRAMEWORK.md](STRATEGIC_POLICY_FRAMEWORK.md)** - Complete policy recommendations
+- **[COMPREHENSIVE_TECHNICAL_REPORT.md](analysis_outputs/strategic_analysis/COMPREHENSIVE_TECHNICAL_REPORT.md)** - Full technical methodology
+
+## What's Inside
 
 ```
-├── analysis/
-│   ├── advanced_risk_analysis.py           # CERS calculation and risk modeling
-│   ├── generate_presentation_dashboard.py  # Interactive visualization generator
-│   ├── biometric_analysis.py               # Per-dataset deep-dive analysis
-│   ├── multi_dataset_analysis.py           # Comparative dashboard
-│   ├── generate_insights.py                # National insights aggregation
-│   └── requirements.txt                    # Python dependencies
-├── analysis_outputs/
-│   ├── strategic_analysis/                 # Advanced analytics outputs
-│   ├── enrolment/                          # Enrolment dataset visualizations
-│   ├── demographic/                        # Demographic dataset visualizations
-│   └── biometric/                          # Biometric dataset visualizations
-├── api_data_aadhar_enrolment/             # Enrolment dataset (CSV files)
-├── api_data_aadhar_demographic/           # Demographic dataset (CSV files)
-└── api_data_aadhar_biometric/             # Biometric dataset (CSV files)
+├── analysis/                              # Python scripts for data analysis
+│   ├── advanced_risk_analysis.py         # Main analysis - calculates risk scores
+│   ├── generate_presentation_dashboard.py # Creates interactive charts
+│   └── requirements.txt                  # List of needed software packages
+├── analysis_outputs/strategic_analysis/   # Results and visualizations
+├── api_data_aadhar_enrolment/            # Enrollment data (CSV files)
+├── api_data_aadhar_demographic/          # Demographic data (CSV files)
+└── api_data_aadhar_biometric/            # Biometric data (CSV files)
 ```
 
 ## Installation & Setup
@@ -42,16 +37,16 @@ This repository contains a comprehensive analytical framework for UIDAI Aadhaar 
 - Git
 
 ### Installation Steps
+How to Run This
+
+### What You Need
+- Python 3.8 or newer
+- Git
+
+### Setup Steps
 
 ```powershell
-# Clone the repository
-git clone <repository-url>
-cd "Aadhar data Hackthon"
-
-# Create and activate virtual environment (recommended)
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-
+# Download the code
 # Install dependencies
 pip install -r analysis/requirements.txt
 ```

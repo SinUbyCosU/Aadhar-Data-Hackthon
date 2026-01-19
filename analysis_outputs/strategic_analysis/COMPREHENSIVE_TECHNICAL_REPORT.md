@@ -3,7 +3,6 @@
 
 ## Executive Summary
 
-**Prepared by:** Senior Data Scientist & Public Policy Strategist  
 **Date:** January 19, 2026  
 **Dataset Coverage:** 1132 districts across India
 

@@ -40,8 +40,8 @@ CERS = Gap Risk(40%) + Migration Risk(25%) + Volatility(20%) + Volume Pressure(1
 
 ## ECONOMIC ANALYSIS
 
-### Sample Dataset (M enrollments)
-- **Investment:** ₹.7 crore
+### Sample Dataset (1M enrollments)
+- **Investment:** ₹2.74 crore
 - **Annual Savings:** ₹8.75 lakh
 - **Citizens Helped:** 61
 
@@ -64,14 +64,14 @@ CERS = Gap Risk(40%) + Migration Risk(25%) + Volatility(20%) + Volume Pressure(1
 ---
 
 ## COMPETITIVE ADVANTAGES
-Traditional Approach | This Framework |
+
+| Traditional Approach | This Framework |
 |---------------------|----------------|
 | Descriptive visualization of historical data | Predictive modeling of future exclusion risk |
 | Retrospective statistical analysis | Prospective intervention deployment |
 | General-purpose dashboards | Novel, purpose-built risk metric (CERS) |
 | Academic research insights | Implementation-ready policy solutions |
-| Estimated impact projections | Quantified ROI with empirical validation|
-| Hypothetical ROI | Quantified with real numbers |
+| Estimated impact projections | Quantified ROI with empirical validation |
 
 ---
 
@@ -119,33 +119,26 @@ Traditional Approach | This Framework |
 
 ## EXECUTIVE SUMMARY
 
-**Policy Statement:**
+UIDAI faces a previously unidentified challenge: seasonal agricultural migration creates gaps in biometric update completion, leading to benefit access disruption for vulnerable populations. Through analysis of 5 million enrollment records, we developed CERS (Citizen Exclusion Risk Score), a predictive metric that identifies 33 high-risk districts where citizen exclusion is most likely to occur.
 
-UIDAI currently faces a predictable yet previously unidentified challenge: seasonal agricultural migration creates systematic gaps in biometric update completion, leading to benefit access disruption for vulnerable populations. Through analysis of 5 million enrollment records, we developed CERS (Citizen Exclusion Risk Score), a predictive metric that identifies 33 high-risk districts where citizen exclusion is most likely to occur.
+Our proposed four-pillar intervention framework—AI-optimized mobile enrollment units, proactive citizen alert systems, district capacity enhancement, and seasonal resource planning—addresses this challenge directly. Initial investment of ₹2.74 crore for sample districts scales to ₹50 crore annually at national level, generating ₹950 crore in annual savings (1,900% ROI) while ensuring 20 million citizens maintain uninterrupted access to essential government benefits.
 
-Our propos INFORMATION
+---
 
-**Technical Inquiries:**
-- Complete methodology documentation available in technical reports
-- Source code provided with comprehensive inline documentation
-- Structured data outputs in JSON format
+## CONTACT INFORMATION
+
+**Technical Questions:**
+- Full methodology available in technical reports
+- Source code with detailed documentation
+- Data outputs in JSON format
 
 **Implementation Planning:**
-- 3-month proof of concept deployment plan
-- UIDAI system integration specifications
-- Field team training materials and protocols
-- JSON exports of all insights
+- 3-month pilot deployment plan
+- UIDAI system integration plan
+- Training materials for field teams
 
-**For Pilot Planning:**
 ---
 
 *UIDAI Aadhaar Hackathon 2026*  
-*Transforming Data into Impact, Algorithms into Action, Insights into Inclusion*  
-*January 19, 202hy it wins.**
-
----
-
-*UIDAI Aadhaar Hackathon 06*  
-*"Transforming Data into Impact, Algorithms into Action, Insights into Inclusion"*  
-*January 9, 06*
+*January 19, 2026*
 
