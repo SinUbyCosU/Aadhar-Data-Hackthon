@@ -55,7 +55,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 🎯 INTERVENTION STRATEGY: Multi-Pronged Intervention Strategy
+## INTERVENTION STRATEGY: Multi-Pronged Intervention Strategy
 
 ### 1. AI-Driven Mobile Van Route Optimizer
 
@@ -102,7 +102,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 💰 ECONOMIC IMPACT: The Business Case
+## ECONOMIC IMPACT: The Business Case
 
 ### Cost Analysis
 - **Current Annual Exclusion Cost:** ₹305,000
@@ -137,7 +137,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 🚀 IMPLEMENTATION ROADMAP
+## IMPLEMENTATION ROADMAP
 
 ### Phase 1: Pilot (Months 1-3)
 - Deploy in top 10 CERS districts
@@ -159,7 +159,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 📈 SUCCESS METRICS
+## SUCCESS METRICS
 
 1. **CERS Reduction:** Target 30% decrease in average CERS across intervention districts
 2. **Biometric Completion Rate:** Achieve >90% in all districts within 12 months
@@ -169,7 +169,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 🏆 COMPETITIVE ADVANTAGES
+## COMPETITIVE ADVANTAGES
 
 ### Why This Wins the Hackathon
 
@@ -183,7 +183,7 @@ We've developed **CERS** - a composite metric that predicts which districts are 
 
 ---
 
-## 📚 TECHNICAL APPENDIX
+## TECHNICAL APPENDIX
 
 ### Data Sources
 - Aadhaar Enrolment Dataset: 1,006,029 records
@@ -206,7 +206,7 @@ All visualizations available in `/analysis_outputs/killer_move/`
 
 ---
 
-## 💡 CONCLUSION
+## CONCLUSION
 
 This submission demonstrates **data-driven policy innovation** at its best. We've moved beyond "what happened" to answer "what will happen" and "what should we do."
 
